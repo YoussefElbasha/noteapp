@@ -1,7 +1,9 @@
+import Tiptap from '@/components/TipTap'
+
 const HomePage = () => {
   return (
     <main className="min-h-screen">
-      <div className="w-full">Hello World!!!</div>
+      <Tiptap />
     </main>
   )
 }
