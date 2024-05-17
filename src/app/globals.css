@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer components {
+  .tiptap > p {
+    @apply text-base leading-6 tracking-normal;
+  }
+  .tiptap > * > p {
+    @apply text-base leading-6 tracking-normal;
+  }
+  .tiptap > h1 {
+    @apply text-3xl font-bold leading-10 tracking-normal;
+  }
+  .tiptap > * > h1 {
+    @apply text-3xl font-bold leading-10 tracking-normal;
+  }
+  .tiptap > h2 {
+    @apply text-2xl font-semibold leading-8 tracking-normal;
+  }
+  .tiptap > * > h2 {
+    @apply text-2xl font-semibold leading-8 tracking-normal;
+  }
+  .tiptap > h3 {
+    @apply text-xl font-semibold leading-6 tracking-normal;
+  }
+  .tiptap > * > h3 {
+    @apply text-xl font-semibold leading-6 tracking-normal;
+  }
+  .tiptap > blockquote {
+    @apply border-l-2 border-gray-300/90 pl-4;
+  }
+  .tiptap > * > code {
+    @apply bg-neutral-200/50 text-neutral-500;
+  }
+  .tiptap > pre {
+    @apply bg-gray-800 text-white p-4 rounded-lg;
+  }
+  .tiptap > pre > code {
+    @apply text-inherit p-0 bg-transparent;
+  }
+  .tiptap > ol {
+    @apply list-decimal list-outside pl-8;
+  }
+  .tiptap > ul {
+    @apply list-disc list-outside pl-8;
+  }
+}
