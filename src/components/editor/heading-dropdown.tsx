@@ -6,10 +6,10 @@ import {
 } from '@/components/shadcn/dropdown'
 import FontSize from '@/icons/font-size.svg'
 import ChevronDown from '@/icons/arrow-down-s-line.svg'
-import { useCurrentEditor } from '@tiptap/react'
+import { useEditorContext } from '@/app/contexts/editor-context'
 
 const HeadingDropDown = () => {
-  const { editor } = useCurrentEditor()
+  const { editor } = useEditorContext()
 
   if (!editor) {
     return null

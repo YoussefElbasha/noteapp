@@ -13,7 +13,7 @@ import {
 } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import React from 'react'
-import TestMenuBar from '../tiptap/menubar'
+import TestMenuBar from '../editor/menubar'
 
 const MenuBar = () => {
   const { editor } = useCurrentEditor()

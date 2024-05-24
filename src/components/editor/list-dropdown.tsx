@@ -4,13 +4,13 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/shadcn/dropdown'
-import { useCurrentEditor } from '@tiptap/react'
 import ChevronDown from '@/icons/arrow-down-s-line.svg'
 import BulletList from '@/icons/list-unordered.svg'
 import OrderedList from '@/icons/list-ordered.svg'
+import { useEditorContext } from '@/app/contexts/editor-context'
 
 const ListDropDown = () => {
-  const { editor } = useCurrentEditor()
+  const { editor } = useEditorContext()
 
   if (!editor) {
     return null
