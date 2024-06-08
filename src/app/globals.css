@@ -1,6 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* width */
+
+::-webkit-scrollbar {
+  width: 1em;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+  background: #131313;
+  border-radius: 100vw;
+  margin-block: 0.5em;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border: 0.25em solid #131313;
+  border-radius: 100vw;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+@layer utilities {
+  .full-bleed {
+    box-shadow: -10px 0 0 0 #1c1c1c, 10px 0 0 0 #1c1c1c;
+  }
+}
+
 @layer components {
   .tiptap > p {
     @apply text-base leading-6 tracking-normal;
@@ -27,21 +62,21 @@
     @apply text-xl font-semibold leading-6 tracking-normal;
   }
   .tiptap > blockquote {
-    @apply border-l-2 border-gray-300/90 pl-4;
+    @apply pl-4 border-l-2 border-gray-300/90;
   }
   .tiptap > * > code {
     @apply bg-neutral-200/50 text-neutral-500;
   }
   .tiptap > pre {
-    @apply bg-gray-800 text-white p-4 rounded-lg;
+    @apply p-4 text-white bg-gray-800 rounded-lg;
   }
   .tiptap > pre > code {
-    @apply text-inherit p-0 bg-transparent;
+    @apply p-0 bg-transparent text-inherit;
   }
   .tiptap > ol {
-    @apply list-decimal list-outside pl-8;
+    @apply pl-8 list-decimal list-outside;
   }
   .tiptap > ul {
-    @apply list-disc list-outside pl-8;
+    @apply pl-8 list-disc list-outside;
   }
 }

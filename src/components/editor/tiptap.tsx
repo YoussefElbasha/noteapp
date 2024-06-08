@@ -2,7 +2,7 @@
 
 import { EditorContent } from '@tiptap/react'
 import React from 'react'
-import MenuBar from './menubar'
+import TipTapMenuBar from './tiptap-menu-bar'
 import { useEditorContext } from '@/app/contexts/editor-context'
 
 const TipTap = () => {
@@ -23,10 +23,10 @@ const TipTap = () => {
     //   </BubbleMenu> */}
     // </EditorProvider>
 
-    <>
-      <MenuBar />
+    <div className="[&_div:nth-child(2)]:flex [&_div:nth-child(2)]:flex-1 [&_div:nth-child(2)]:flex-col [&_div:nth-child(2)]:overflow-y-auto">
+      {/* <TipTapMenuBar /> */}
       <EditorContent editor={editor} />
-    </>
+    </div>
   )
 }
 

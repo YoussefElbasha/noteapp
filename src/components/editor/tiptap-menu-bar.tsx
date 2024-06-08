@@ -11,7 +11,7 @@ import ListDropDown from './list-dropdown'
 import { db } from '@/database/db.model'
 import { useEditorContext } from '@/app/contexts/editor-context'
 
-const MenuBar = () => {
+const TipTapMenuBar = () => {
   const { editor } = useEditorContext()
 
   const menuButtons = useMemo(() => {
@@ -68,7 +68,7 @@ const MenuBar = () => {
   }
 
   return (
-    <div className="ml-auto flex flex-row justify-start items-center p-0.5 gap-0.5 rounded-md bg-white w-fit ">
+    <div className="ml-auto flex flex-row justify-start items-center p-0.5 gap-0.5 rounded-md bg-white w-fit">
       {/* <button
         aria-label="Save"
         onClick={() => console.log(editor.getJSON())}
@@ -118,4 +118,4 @@ const MenuBar = () => {
   )
 }
 
-export default MenuBar
+export default TipTapMenuBar

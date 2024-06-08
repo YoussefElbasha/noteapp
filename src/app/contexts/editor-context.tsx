@@ -6,6 +6,7 @@ import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import TextStyle from '@tiptap/extension-text-style'
 import StarterKit from '@tiptap/starter-kit'
+import CharacterCount from '@tiptap/extension-character-count'
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -20,6 +21,7 @@ const extensions = [
       keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
     },
   }),
+  CharacterCount,
 ]
 
 // const content = `
@@ -65,9 +67,11 @@ const defaultContent = {
 const editorProps = {
   attributes: {
     class:
-      'prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl p-2 rounded-md mt-2 focus:outline-none bg-white overflow-y-auto flex-1 px-6 py-4',
+      'prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none bg-red-500 text-text-dark overflow-y-auto min-h-[calc(100vh-2.62rem-1.25rem-1.25rem-1.5rem)]',
   },
 }
+
+// min-h-[calc(100vh-2.62rem-1.25rem-1.25rem-1.5rem)]
 
 type EditorContextType = {
   editor: Editor | null
