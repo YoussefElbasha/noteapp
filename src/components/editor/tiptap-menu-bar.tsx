@@ -10,9 +10,12 @@ import HeadingDropDown from './heading-dropdown'
 import ListDropDown from './list-dropdown'
 import { db } from '@/database/db.model'
 import { useEditorContext } from '@/app/contexts/editor-context'
+import { useEditorStore } from '@/app/contexts/editor-store-provider'
 
 const TipTapMenuBar = () => {
   const { editor } = useEditorContext()
+
+  // const { editor } = useEditorStore((state) => state)
 
   const menuButtons = useMemo(() => {
     if (!editor) {
@@ -24,40 +27,40 @@ const TipTapMenuBar = () => {
         command: () => editor.chain().focus().toggleBold().run(),
         disabled: () => !editor.can().chain().focus().toggleBold().run(),
         isActive: 'bold',
-        icon: <Bold className="w-6 h-6" />,
+        icon: <Bold className='w-6 h-6' />,
         title: 'Bold',
       },
       {
         command: () => editor.chain().focus().toggleItalic().run(),
         disabled: () => !editor.can().chain().focus().toggleItalic().run(),
         isActive: 'italic',
-        icon: <Italic className="w-6 h-6" />,
+        icon: <Italic className='w-6 h-6' />,
         title: 'Italic',
       },
       {
         command: () => editor.chain().focus().toggleStrike().run(),
         disabled: () => !editor.can().chain().focus().toggleStrike().run(),
         isActive: 'strike',
-        icon: <Strike className="w-6 h-6" />,
+        icon: <Strike className='w-6 h-6' />,
         title: 'Strike',
       },
       {
         command: () => editor.chain().focus().toggleBlockquote().run(),
         isActive: 'blockquote',
-        icon: <BlockQuote className="w-6 h-6" />,
+        icon: <BlockQuote className='w-6 h-6' />,
         title: 'blockquote',
       },
       {
         command: () => editor.chain().focus().toggleCode().run(),
         disabled: () => !editor.can().chain().focus().toggleCode().run(),
         isActive: 'code',
-        icon: <Code className="w-6 h-6" />,
+        icon: <Code className='w-6 h-6' />,
         title: 'Code',
       },
       {
         command: () => editor.chain().focus().toggleCodeBlock().run(),
         isActive: 'codeBlock',
-        icon: <CodeBlock className="w-6 h-6" />,
+        icon: <CodeBlock className='w-6 h-6' />,
         title: 'Code Block',
       },
     ]
@@ -68,7 +71,7 @@ const TipTapMenuBar = () => {
   }
 
   return (
-    <div className="ml-auto flex flex-row justify-start items-center p-0.5 gap-0.5 rounded-md bg-white w-fit">
+    <div className='ml-auto flex flex-row justify-start items-center p-0.5 gap-0.5 rounded-md bg-white w-fit'>
       {/* <button
         aria-label="Save"
         onClick={() => console.log(editor.getJSON())}
@@ -112,7 +115,7 @@ const TipTapMenuBar = () => {
           {button.icon}
         </button>
       ))}
-      <div className="inline-block  min-h-[1em] my-1 w-[1px] self-stretch bg-zinc-200"></div>
+      <div className='inline-block  min-h-[1em] my-1 w-[1px] self-stretch bg-zinc-200'></div>
       <ListDropDown />
     </div>
   )

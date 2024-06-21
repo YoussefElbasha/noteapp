@@ -1,21 +1,23 @@
-import { JSONContent } from '@tiptap/react';
-import Dexie, { Table } from 'dexie';
+import { JSONContent } from '@tiptap/react'
+import Dexie, { Table } from 'dexie'
 
 // table inteface
 export interface Note {
-  id?: number;
-  content: JSONContent;
+  id?: number
+  title: string
+  content: JSONContent
+  createdAt: Date
 }
 
 export class DB extends Dexie {
   // table name is userNotes
-  userNotes!: Table<Note>;
+  userNotes!: Table<Note>
   constructor() {
-    super('myDatabase');
+    super('myDatabase')
     this.version(1).stores({
-      userNotes: '++id, content'
-    });
+      userNotes: '++id, title, content, createdAt'
+    })
   }
 }
 
-export const db = new DB(); // export the db
+export const db = new DB() // export the db

@@ -1,29 +1,51 @@
+import { useEditorContext } from '@/app/contexts/editor-context'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/shadcn/tooltip'
+import { db } from '@/database/db.model'
+import { useLiveQuery } from 'dexie-react-hooks'
+import cn from 'classnames'
 
 type ActivePagesButtonProps = {
-  pageNumber: string
+  noteId: number
+  pageNumber: number
 }
 
-const ActivePagesButton = ({ pageNumber }: ActivePagesButtonProps) => {
+const ActivePagesButton = ({ pageNumber, noteId }: ActivePagesButtonProps) => {
+  const { currentNote, setCurrentNote, closeActivePage } = useEditorContext()
+  const note = useLiveQuery(() => db.userNotes.get(noteId))
+
   return (
     <TooltipProvider delayDuration={100}>
       <Tooltip>
-        <div className="relative group">
-          <TooltipTrigger className="max-w-[2.32rem] min-w-[2.32rem] text-center py-2 text-sm rounded-lg bg-component-background-dark text-white/60 overflow-hidden truncate">
+        <div className='relative group'>
+          <TooltipTrigger
+            className={cn(
+              'max-w-[2.32rem] min-w-[2.32rem] text-center py-2 text-sm rounded-lg text-white/60 overflow-hidden truncate',
+              {
+                'bg-component-background-dark brightness-150':
+                  noteId === currentNote?.id,
+                'bg-component-background-dark': noteId !== currentNote?.id,
+              }
+            )}
+            onClick={() => setCurrentNote(note)}
+          >
             {pageNumber}
           </TooltipTrigger>
           <button
-            className="invisible absolute w-[0.75rem] h-[0.75rem] bg-orange-dark -top-[10%] -right-[12%] z-[100] text-white rounded-full group-hover:visible group-hover:animate-in group-hover:fade-in delay-100"
-            onClick={() => alert('close')}
+            className='invisible absolute w-[0.75rem] h-[0.75rem] bg-orange-dark -top-[10%] -right-[12%] z-[100] text-white rounded-full group-hover:visible group-hover:animate-in group-hover:fade-in delay-100'
+            onClick={() => {
+              closeActivePage(noteId)
+            }}
           ></button>
         </div>
         <TooltipContent>
-          <p>Page {pageNumber}</p>
+          <p className='max-w-[20ch] truncate'>
+            {note?.title === '' ? 'untitled' : note?.title}
+          </p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
@@ -31,15 +53,3 @@ const ActivePagesButton = ({ pageNumber }: ActivePagesButtonProps) => {
 }
 
 export default ActivePagesButton
-
-{
-  /* <button className="max-w-[2.32rem] min-w-[2.32rem] text-center py-2 text-sm rounded-lg bg-component-background-dark text-white/60 overflow-hidden truncate">
-            {pageNumber}
-          </button> */
-}
-
-{
-  /* <button className="px-3.5 py-2 text-sm rounded-lg bg-component-background-dark text-white/60 ">
-        2
-</button> */
-}

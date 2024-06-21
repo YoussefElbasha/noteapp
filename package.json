@@ -15,12 +15,13 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@tiptap/extension-character-count": "^2.4.0",
     "@tiptap/extension-color": "^2.3.2",
-    "@tiptap/extension-text-style": "^2.3.2",
+    "@tiptap/extension-text-style": "^2.4.0",
     "@tiptap/pm": "^2.3.2",
     "@tiptap/react": "^2.3.2",
     "@tiptap/starter-kit": "^2.3.2",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
+    "date-fns": "^3.6.0",
     "dexie": "^4.0.4",
     "dexie-react-hooks": "^1.1.7",
     "framer-motion": "^11.2.6",
@@ -31,7 +32,10 @@
     "react-nestable": "^3.0.2",
     "react-textarea-autosize": "^8.5.3",
     "sass": "^1.77.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "tiptap": "^1.32.2",
+    "use-debounce": "^10.0.1",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

@@ -1,16 +1,19 @@
 'use client'
 
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { Editor, useEditor } from '@tiptap/react'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
-import TextStyle from '@tiptap/extension-text-style'
+import TextStyle, { TextStyleOptions } from '@tiptap/extension-text-style'
 import StarterKit from '@tiptap/starter-kit'
 import CharacterCount from '@tiptap/extension-character-count'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { db, Note } from '@/database/db.model'
+import { useDebouncedCallback } from 'use-debounce'
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
-  TextStyle.configure({ types: [ListItem.name] }),
+  TextStyle.configure({ types: [ListItem.name] } as Partial<TextStyleOptions>),
   StarterKit.configure({
     bulletList: {
       keepMarks: true,
@@ -24,38 +27,7 @@ const extensions = [
   CharacterCount,
 ]
 
-// const content = `
-// <h2>
-//   Hi there,
-// </h2>
-// <p>
-//   this is a <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
-// </p>
-// <ul>
-//   <li>
-//     That’s a bullet list with one …
-//   </li>
-//   <li>
-//     … or two list items.
-//   </li>
-// </ul>
-// <p>
-//   Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
-// </p>
-// <pre><code class="language-css">body {
-// display: none;
-// }</code></pre>
-// <p>
-//   I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
-// </p>
-// <blockquote>
-//   Wow, that’s amazing. Good work, boy! 👏
-//   <br />
-//   — Mom
-// </blockquote>
-// `
-
-const defaultContent = {
+export const defaultContent = {
   type: 'doc',
   content: [
     {
@@ -73,12 +45,29 @@ const editorProps = {
 
 // min-h-[calc(100vh-2.62rem-1.25rem-1.25rem-1.5rem)]
 
-type EditorContextType = {
+type EditorStates = {
   editor: Editor | null
+  currentNote: Note | undefined
+  activePages: number[]
 }
 
-export const EditorContext = createContext<EditorContextType>({
+type EditorActions = {
+  setCurrentNote: (newNote: Note | undefined) => void
+  closeActivePage: (id: number) => void
+  deleteNote: (id: number | undefined) => void
+  addNewNote: () => void
+}
+
+type EditorContext = EditorStates & EditorActions
+
+export const EditorContext = createContext<EditorContext>({
   editor: null,
+  currentNote: undefined,
+  setCurrentNote: () => {},
+  activePages: [],
+  closeActivePage: () => {},
+  addNewNote: () => {},
+  deleteNote: () => {},
 })
 
 export const EditorContextProvider = ({
@@ -86,14 +75,122 @@ export const EditorContextProvider = ({
 }: {
   children: React.ReactNode
 }) => {
+  const [currentNote, setNote] = useState<Note | undefined>(undefined)
+  const [activePages, setActivePages] = useState<number[]>([])
+
+  const notesList = useLiveQuery(() => db.userNotes.toArray())
+
+  const setCurrentNote = (newNote: Note | undefined) => {
+    if (!newNote || !newNote.id) {
+      setNote(undefined)
+      return
+    }
+
+    const oldNoteId = currentNote?.id
+
+    if (!oldNoteId) {
+      setNote(newNote)
+      setActivePages([newNote.id])
+      return
+    }
+
+    if (!activePages.includes(newNote.id)) {
+      if (activePages.length >= 7) {
+        const newArray = [...activePages]
+        newArray[activePages.indexOf(oldNoteId)] = newNote.id
+        setActivePages(newArray)
+      } else {
+        const newActivePages = [...activePages, newNote.id]
+        setActivePages(newActivePages)
+      }
+    }
+
+    setNote(newNote)
+  }
+
+  const closeActivePage = (id: number) => {
+    if (id === currentNote?.id) {
+      if (activePages.length > 1) {
+        db.userNotes
+          .get(activePages.filter((noteId) => id !== noteId)[0])
+          .then((note) => {
+            setCurrentNote(note)
+            const newActivePages = activePages.filter((pageId) => pageId !== id)
+            setActivePages(newActivePages)
+          })
+      } else {
+        setCurrentNote(undefined)
+      }
+    }
+
+    const newActivePages = activePages.filter((pageId) => pageId !== id)
+    setActivePages(newActivePages)
+  }
+
+  const addNewNote = async () => {
+    const newNoteId = await db.userNotes.add({
+      title: '',
+      content: defaultContent,
+      createdAt: new Date(),
+    })
+
+    const note = db.userNotes.get(newNoteId).then((note) => {
+      setCurrentNote(note)
+      // editor?.commands.setContent(defaultContent)
+    })
+  }
+
+  const deleteNote = (id: number | undefined) => {
+    if (!id) return
+
+    db.userNotes.delete(id)
+
+    closeActivePage(id)
+
+    // if (id === currentNote?.id) {
+    //   if (notesList && notesList?.length > 1) {
+    //     setCurrentNote(notesList?.[0])
+    //   } else {
+    //     setCurrentNote(undefined)
+    //   }
+    // }
+  }
+
+  // useEffect(() => {
+  //   const notes = db.userNotes.toArray().then((notes) => {
+  //     if (notes?.length !== 0) {
+  //       if (!notes[0] || !notes[0].id) {
+  //         return
+  //       }
+  //       setCurrentNote(notes[0])
+  //     }
+  //   })
+  // }, [])
+
+  const debounced = useDebouncedCallback((value) => {
+    db.userNotes.update(currentNote?.id, { content: value.editor.getJSON() })
+    // console.count('update')
+  }, 1000)
+
   const editor = useEditor({
     extensions: extensions,
-    content: defaultContent,
+    content: currentNote?.content || defaultContent,
     editorProps: editorProps,
+    onUpdate: (value) => debounced(value),
   })
 
   return (
-    <EditorContext.Provider value={{ editor }}>
+    <EditorContext.Provider
+      value={{
+        editor,
+        currentNote,
+        setCurrentNote,
+        activePages,
+        closeActivePage,
+        addNewNote,
+        deleteNote,
+      }}
+    >
       {children}
     </EditorContext.Provider>
   )
