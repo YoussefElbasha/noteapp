@@ -3,7 +3,7 @@
 import * as React from 'react'
 import * as SheetPrimitive from '@radix-ui/react-dialog'
 import { cva, type VariantProps } from 'class-variance-authority'
-import X from '@/icons/X.svg'
+import X from '@/icons/x.svg'
 
 import cn from 'classnames'
 
@@ -102,15 +102,15 @@ const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <div className="flex flex-row items-center justify-between">
+  <div className='flex flex-row items-center justify-between'>
     <SheetPrimitive.Title
       ref={ref}
       className={cn('text-base font-medium text-text-dark', className)}
       {...props}
     />
-    <SheetPrimitive.Close className="rounded-sm focus:outline-none focus:ring-0 disabled:pointer-events-none data-[state=open]:bg-secondary">
-      <X className="transition-colors min-w-5 min-h-5 max-w-5 max-h-5 text-text-dark/60 hover:text-text-dark" />
-      <span className="sr-only">Close</span>
+    <SheetPrimitive.Close className='rounded-sm focus:outline-none focus:ring-0 disabled:pointer-events-none data-[state=open]:bg-secondary'>
+      <X className='transition-colors min-w-5 min-h-5 max-w-5 max-h-5 text-text-dark/60 hover:text-text-dark' />
+      <span className='sr-only'>Close</span>
     </SheetPrimitive.Close>
   </div>
 ))
