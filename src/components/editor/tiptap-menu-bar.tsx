@@ -5,12 +5,11 @@ import Strike from '@/icons/strikethrough.svg'
 import BlockQuote from '@/icons/double-quotes-r.svg'
 import Code from '@/icons/code-view.svg'
 import CodeBlock from '@/icons/code-block.svg'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import HeadingDropDown from './heading-dropdown'
 import ListDropDown from './list-dropdown'
 import { db } from '@/database/db.model'
 import { useEditorContext } from '@/app/contexts/editor-context'
-import { useEditorStore } from '@/app/contexts/editor-store-provider'
 
 const TipTapMenuBar = () => {
   const { editor } = useEditorContext()
@@ -27,40 +26,40 @@ const TipTapMenuBar = () => {
         command: () => editor.chain().focus().toggleBold().run(),
         disabled: () => !editor.can().chain().focus().toggleBold().run(),
         isActive: 'bold',
-        icon: <Bold className='w-6 h-6' />,
+        icon: <Bold className='w-5 h-5' />,
         title: 'Bold',
       },
       {
         command: () => editor.chain().focus().toggleItalic().run(),
         disabled: () => !editor.can().chain().focus().toggleItalic().run(),
         isActive: 'italic',
-        icon: <Italic className='w-6 h-6' />,
+        icon: <Italic className='w-5 h-5' />,
         title: 'Italic',
       },
       {
         command: () => editor.chain().focus().toggleStrike().run(),
         disabled: () => !editor.can().chain().focus().toggleStrike().run(),
         isActive: 'strike',
-        icon: <Strike className='w-6 h-6' />,
+        icon: <Strike className='w-5 h-5' />,
         title: 'Strike',
       },
       {
         command: () => editor.chain().focus().toggleBlockquote().run(),
         isActive: 'blockquote',
-        icon: <BlockQuote className='w-6 h-6' />,
+        icon: <BlockQuote className='w-5 h-5' />,
         title: 'blockquote',
       },
       {
         command: () => editor.chain().focus().toggleCode().run(),
         disabled: () => !editor.can().chain().focus().toggleCode().run(),
         isActive: 'code',
-        icon: <Code className='w-6 h-6' />,
+        icon: <Code className='w-5 h-5' />,
         title: 'Code',
       },
       {
         command: () => editor.chain().focus().toggleCodeBlock().run(),
         isActive: 'codeBlock',
-        icon: <CodeBlock className='w-6 h-6' />,
+        icon: <CodeBlock className='w-5 h-5' />,
         title: 'Code Block',
       },
     ]
@@ -70,53 +69,37 @@ const TipTapMenuBar = () => {
     return null
   }
 
+  // hover:bg-zinc-200/50
+
   return (
-    <div className='ml-auto flex flex-row justify-start items-center p-0.5 gap-0.5 rounded-md bg-white w-fit'>
-      {/* <button
-        aria-label="Save"
-        onClick={() => console.log(editor.getJSON())}
-        className="hover:bg-zinc-200/50 p-0.5 rounded-md"
-        title="Save"
-      >
-        Save
-      </button>
-
-      <button
-        aria-label="Save"
-        onClick={() => {
-          db.userNotes.add({ content: editor.getJSON() })
-        }}
-        className="hover:bg-zinc-200/50 p-0.5 rounded-md"
-        title="Save"
-      >
-        Save to db
-      </button>
-
-      <button
-        aria-label="Save"
-        onClick={() => editor.commands.setContent(test)}
-        className="hover:bg-zinc-200/50 p-0.5 rounded-md"
-        title="Save"
-      >
-        Set
-      </button> */}
+    <div className='ml-auto flex flex-row justify-start items-center px-2 py-2 gap-1 rounded-xl bg-component-background-dark w-fit'>
+      {/* <OldHeadingDropDown /> */}
       <HeadingDropDown />
+
+      <div className='inline-block min-h-[1em] my-0.5 w-[0px] border-r-[1.6px] self-stretch border-[#3e414a]'></div>
+
       {menuButtons.map((button, index) => (
         <button
           key={index}
           onClick={button.command}
           disabled={button.disabled?.() ?? false}
-          className={cn('hover:bg-zinc-200/50 p-0.5 rounded-md', {
-            'bg-zinc-200 ': editor.isActive(button.isActive),
-            'bg-white ': !editor.isActive(button.isActive),
-          })}
+          className={cn(
+            'hover:bg-tiptap-menu-bar-background-hover hover:text-[#e5e6eb] py-0.5 px-[0.15rem] rounded-md transition-colors',
+            {
+              'bg-[#2d3038] text-[#e5e6eb]': editor.isActive(button.isActive),
+              ' bg-transparent text-[#9c9ea1]': !editor.isActive(
+                button.isActive
+              ),
+            }
+          )}
           title={button.title}
         >
           {button.icon}
         </button>
       ))}
-      <div className='inline-block  min-h-[1em] my-1 w-[1px] self-stretch bg-zinc-200'></div>
+      <div className='inline-block min-h-[1em] my-0.5 w-[0px] border-r-[1.6px] self-stretch border-[#3e414a]'></div>
       <ListDropDown />
+      {/* <OldListDropDown />  */}
     </div>
   )
 }

@@ -1,15 +1,19 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, use, useContext, useEffect, useState } from 'react'
 import { Editor, useEditor } from '@tiptap/react'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import TextStyle, { TextStyleOptions } from '@tiptap/extension-text-style'
 import StarterKit from '@tiptap/starter-kit'
 import CharacterCount from '@tiptap/extension-character-count'
+import Underline from '@tiptap/extension-underline'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, Note } from '@/database/db.model'
 import { useDebouncedCallback } from 'use-debounce'
+import { Markdown } from 'tiptap-markdown'
+import Image from '@tiptap/extension-image'
+import ImageResize from 'tiptap-extension-resize-image'
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -25,6 +29,18 @@ const extensions = [
     },
   }),
   CharacterCount,
+  Underline,
+  Markdown,
+  Image.configure({
+    allowBase64: true,
+    HTMLAttributes: {
+      class: 'min-h-[100px] max-h-[500px] ml-[50%] translate-x-[-50%] ',
+    },
+  }),
+  // ImageResize
+  // BubbleMenu.configure({
+  //   element: document.querySelector('.menu'),
+  // }),
 ]
 
 export const defaultContent = {
@@ -39,7 +55,7 @@ export const defaultContent = {
 const editorProps = {
   attributes: {
     class:
-      'prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none bg-red-500 text-text-dark overflow-y-auto min-h-[calc(100vh-2.62rem-1.25rem-1.25rem-1.5rem)]',
+      'tiptap prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none bg-transparent text-text-dark overflow-y-auto min-h-[calc(100vh-2.62rem-1.25rem-1.25rem-1.5rem-5rem)] overflow-x-hidden',
   },
 }
 
@@ -49,6 +65,8 @@ type EditorStates = {
   editor: Editor | null
   currentNote: Note | undefined
   activePages: number[]
+  currentNoteUpdatedAt: Date | undefined
+  initialized: boolean
 }
 
 type EditorActions = {
@@ -56,6 +74,7 @@ type EditorActions = {
   closeActivePage: (id: number) => void
   deleteNote: (id: number | undefined) => void
   addNewNote: () => void
+  setInitialized: (initizalized: boolean) => void
 }
 
 type EditorContext = EditorStates & EditorActions
@@ -68,6 +87,9 @@ export const EditorContext = createContext<EditorContext>({
   closeActivePage: () => {},
   addNewNote: () => {},
   deleteNote: () => {},
+  currentNoteUpdatedAt: undefined,
+  initialized: false,
+  setInitialized: () => {},
 })
 
 export const EditorContextProvider = ({
@@ -75,21 +97,34 @@ export const EditorContextProvider = ({
 }: {
   children: React.ReactNode
 }) => {
+  const notesList = useLiveQuery(() => db.userNotes.toArray())
+
   const [currentNote, setNote] = useState<Note | undefined>(undefined)
   const [activePages, setActivePages] = useState<number[]>([])
 
-  const notesList = useLiveQuery(() => db.userNotes.toArray())
+  const [currentNoteUpdatedAt, setCurrentNoteUpdatedAt] = useState<
+    Date | undefined
+  >(undefined)
+
+  const [initialized, setInitialized] = useState<boolean>(false)
 
   const setCurrentNote = (newNote: Note | undefined) => {
+    // TODO: check the logic of this
     if (!newNote || !newNote.id) {
       setNote(undefined)
+      editor?.commands.setContent(defaultContent)
       return
     }
 
     const oldNoteId = currentNote?.id
 
     if (!oldNoteId) {
+      db.userNotes.update(newNote.id, {
+        lastOpenedAt: new Date(),
+      })
       setNote(newNote)
+      editor?.commands.setContent(newNote.content)
+      setCurrentNoteUpdatedAt(newNote.updatedAt)
       setActivePages([newNote.id])
       return
     }
@@ -105,7 +140,12 @@ export const EditorContextProvider = ({
       }
     }
 
+    db.userNotes.update(newNote.id, {
+      lastOpenedAt: new Date(),
+    })
     setNote(newNote)
+    editor?.commands.setContent(newNote.content)
+    setCurrentNoteUpdatedAt(newNote.updatedAt)
   }
 
   const closeActivePage = (id: number) => {
@@ -132,11 +172,14 @@ export const EditorContextProvider = ({
       title: '',
       content: defaultContent,
       createdAt: new Date(),
+      updatedAt: new Date(),
+      lastOpenedAt: new Date(),
     })
 
     const note = db.userNotes.get(newNoteId).then((note) => {
       setCurrentNote(note)
-      // editor?.commands.setContent(defaultContent)
+      setCurrentNoteUpdatedAt(note?.updatedAt)
+      editor?.commands.setContent(defaultContent)
     })
   }
 
@@ -168,8 +211,12 @@ export const EditorContextProvider = ({
   // }, [])
 
   const debounced = useDebouncedCallback((value) => {
-    db.userNotes.update(currentNote?.id, { content: value.editor.getJSON() })
-    // console.count('update')
+    const updatedAt = new Date()
+    db.userNotes.update(currentNote?.id, {
+      content: value.editor.getJSON(),
+      updatedAt: updatedAt,
+    })
+    setCurrentNoteUpdatedAt(updatedAt)
   }, 1000)
 
   const editor = useEditor({
@@ -178,6 +225,19 @@ export const EditorContextProvider = ({
     editorProps: editorProps,
     onUpdate: (value) => debounced(value),
   })
+
+  useEffect(() => {
+    const latestOpenedNote = db.userNotes
+      .orderBy('lastOpenedAt')
+      .last()
+      .then((note) => {
+        setCurrentNote(note)
+        setInitialized(true)
+      })
+      .catch((err) => {
+        console.log('err', err)
+      })
+  }, [editor])
 
   return (
     <EditorContext.Provider
@@ -189,6 +249,9 @@ export const EditorContextProvider = ({
         closeActivePage,
         addNewNote,
         deleteNote,
+        currentNoteUpdatedAt,
+        initialized,
+        setInitialized,
       }}
     >
       {children}

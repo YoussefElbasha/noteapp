@@ -7,6 +7,8 @@ export interface Note {
   title: string
   content: JSONContent
   createdAt: Date
+  updatedAt: Date
+  lastOpenedAt: Date
 }
 
 export class DB extends Dexie {
@@ -15,7 +17,7 @@ export class DB extends Dexie {
   constructor() {
     super('myDatabase')
     this.version(1).stores({
-      userNotes: '++id, title, content, createdAt'
+      userNotes: '++id, title, content, createdAt, updatedAt, lastOpenedAt',
     })
   }
 }

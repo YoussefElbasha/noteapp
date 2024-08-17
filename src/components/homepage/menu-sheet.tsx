@@ -44,14 +44,16 @@ const MenuSheet = () => {
           <SheetTitle>Pages</SheetTitle>
         </SheetHeader>
         <Nestable
-          maxDepth={2}
+          // maxDepth={2}
+          maxDepth={1}
+          disableDrag
           className='flex-1 px-8 overflow-y-auto'
           items={nestableItems}
           renderItem={({ item }) => {
             return (
-              <button
+              <div
                 className={cn(
-                  'flex flex-row items-center justify-between w-full py-2 rounded group',
+                  'flex flex-row items-center justify-between w-full py-2 rounded group cursor-pointer',
                   // {
                   //   // TODO: fix little twitchy effect that happens when you click on another note
                   //   'bg-hover-dark  border-hover-dark border-x-[10px] box-content -ml-[10px]':
@@ -63,7 +65,7 @@ const MenuSheet = () => {
                   { 'full-bleed bg-hover-dark': item.id === currentNote?.id }
                 )}
                 onClick={() => {
-                  editor?.commands.setContent(item.note.content)
+                  // editor?.commands.setContent(item.note.content)
                   setCurrentNote(item.note)
                 }}
               >
@@ -109,19 +111,22 @@ const MenuSheet = () => {
                     <TrashAlt className='transition-colors min-w-4 min-h-4 max-w-4 max-h-4 text-text-dark/60 hover:text-text-dark' />
                   </button>
                 </div>
-              </button>
+              </div>
             )
           }}
         />
         <SheetFooter>
           <button
             className='flex flex-row items-center justify-center w-full py-2 transition-all rounded bg-component-background-dark hover:brightness-110 group'
+            // TODO: use addNewNote from context
             onClick={() => {
               db.userNotes
                 .add({
                   title: '',
                   content: defaultContent,
                   createdAt: new Date(),
+                  updatedAt: new Date(),
+                  lastOpenedAt: new Date(),
                 })
                 .then((noteId) => {
                   db.userNotes.get(noteId).then((note) => {

@@ -27,6 +27,11 @@ const config: Config = {
         "hover": {
           "dark": "#1C1C1C",
         },
+        "tiptap-menu-bar": {
+          "background": { "hover": "#333640", }
+
+
+        }
       },
     },
   },
