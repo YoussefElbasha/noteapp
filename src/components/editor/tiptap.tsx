@@ -17,7 +17,11 @@ const TipTap = () => {
 
             if (editor.isActive('image')) return false
 
-            return true
+            const text = state.doc.textBetween(from, to, '\n')
+
+            if (text.length > 0) return true
+
+            return false
           }}
         >
           <TipTapMenuBar />
