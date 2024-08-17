@@ -17,9 +17,6 @@ import Markdown from '@/icons/markdown.svg'
 import saveAs from 'file-saver'
 import { useEffect, useRef, useState } from 'react'
 import { db } from '@/database/db.model'
-import test from '@/lib/test'
-import testing from '@/lib/convert-to-base64'
-// import imageToBase64 from 'image-to-base64'
 
 const items = [
   // {
@@ -38,44 +35,20 @@ const items = [
 const MenuBar = () => {
   const { editor, currentNote, deleteNote, addNewNote } = useEditorContext()
 
-  // const { editor, currentNote, setCurrentNote } = useEditorStore(
-  //   (state) => state
-  // )
-
   const [blob, setBlob] = useState<Blob | null>(null)
 
   useEffect(() => {
-    console.log('change')
     if (!blob) return
 
     const reader = new FileReader()
 
     reader.onload = () => {
-      // console.log(reader.result)
       editor?.commands.setImage({
         src: `${reader.result}`,
       })
     }
 
-    // console.log(file)
-
-    console.log(blob)
-
     reader.readAsDataURL(blob)
-
-    // const result = reader.result
-    // console.log(reader.readAsText(file))
-
-    // reader.readAsDataURL(file)
-    // console.log(reader.result)
-    // editor?.commands.setImage({
-    //   src: `${reader.readAsDataURL(file)}`,
-    // })
-
-    // return () => {
-    //   // remove reader from memory
-    //   reader.abort()
-    // }
   }, [blob])
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -89,55 +62,17 @@ const MenuBar = () => {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     const files = e.target.files
-    console.log(files)
     if (!files) return
 
     const file = files[0]
-
-    console.log('I am here')
 
     const fileBlob = new Blob([file], {
       type: 'image/png',
     })
 
-    // const file = files[0]
-
-    // setBlob(files[0])
-
     setBlob(fileBlob)
 
     e.target.value = ''
-
-    // testing(file)
-
-    // test(file)
-
-    // const base64 = await imageToBase64(
-    //   'https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg'
-    // )
-    // console.log(base64)
-
-    // use the file
-    // console.log(file.name)
-
-    // console.log(file)
-
-    // const testBlob = new Blob([file], {
-    //   type: 'image/png',
-    // })
-
-    // console.log(testBlob)
-
-    // console.log(reader.readAsDataURL(file))
-
-    // console.log('test', readFileSync(file.name, { encoding: 'base64' }))
-    // editor?.commands.setImage({
-    //   src: `${reader.readAsDataURL(file)}`,
-    // })
-
-    // editor?.commands.setImage({
-    //   src: URL.createObjectURL(file),
-    // })
   }
 
   return (
@@ -155,14 +90,7 @@ const MenuBar = () => {
         {currentNote && (
           <>
             <form onSubmit={(e) => e.preventDefault()}>
-              <button
-                // onClick={() =>
-                //   editor?.commands.setImage({
-                //     src: 'https://placehold.co/800x400',
-                //   })
-                // }
-                onClick={(e) => handleButtonClick(e)}
-              >
+              <button onClick={(e) => handleButtonClick(e)}>
                 <Upload className='transition-colors min-w-5 min-h-5 max-w-5 max-h-5 text-text-dark/60 hover:text-text-dark' />
               </button>
               <input

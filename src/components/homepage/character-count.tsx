@@ -1,11 +1,7 @@
 import { useEditorContext } from '@/app/contexts/editor-context'
-import { useEditorStore } from '@/app/contexts/editor-store-provider'
-import { useEffect } from 'react'
 
 const CharacterCount = () => {
   const { editor, currentNote } = useEditorContext()
-
-  // const { editor } = useEditorStore((state) => state)
 
   if (!currentNote) return null
 

@@ -12,14 +12,6 @@ const ActivePages = () => {
           pageNumber={index + 1}
         />
       ))}
-      {/* <ActivePagesButton pageNumber='1' />
-      <ActivePagesButton pageNumber='2' />
-      <ActivePagesButton pageNumber='3' /> */}
-
-      {/*  <ActivePagesButton pageNumber="4" />
-      <ActivePagesButton pageNumber="5" />
-      <ActivePagesButton pageNumber="6" />
-      <ActivePagesButton pageNumber="7" /> */}
     </div>
   )
 }

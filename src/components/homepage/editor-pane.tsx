@@ -3,10 +3,6 @@
 import { useEditorContext } from '@/app/contexts/editor-context'
 import TipTap from '@/components/editor/tiptap'
 import PageHeader from '@/components/homepage/page-header'
-import { useEditorStore } from '@/app/contexts/editor-store-provider'
-import { useLiveQuery } from 'dexie-react-hooks'
-import { db } from '@/database/db.model'
-import { use, useEffect } from 'react'
 
 const EditorPane = () => {
   const { editor, currentNote, initialized } = useEditorContext()

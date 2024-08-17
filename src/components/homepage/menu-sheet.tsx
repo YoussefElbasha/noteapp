@@ -16,13 +16,9 @@ import AddNoCircle from '@/icons/add-no-circle.svg'
 import { defaultContent, useEditorContext } from '@/app/contexts/editor-context'
 import { db } from '@/database/db.model'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { useEditorStore } from '@/app/contexts/editor-store-provider'
 
 const MenuSheet = () => {
   const { editor, currentNote, setCurrentNote, deleteNote } = useEditorContext()
-  // const { editor, currentNote, setCurrentNote } = useEditorStore(
-  //   (state) => state
-  // )
 
   const notesList = useLiveQuery(() => db.userNotes.toArray())
 

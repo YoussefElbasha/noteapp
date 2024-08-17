@@ -1,5 +1,4 @@
 import { useEditorContext } from '@/app/contexts/editor-context'
-import { useEditorStore } from '@/app/contexts/editor-store-provider'
 import { db } from '@/database/db.model'
 import { useEffect, useRef, useState } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -7,35 +6,16 @@ import formatDate from '@/lib/format-date'
 
 // TODO: when title becomes too big the textarea scrollbar is too fat and the textarea has weird behavior
 const PageHeader = () => {
-  const { currentNote, currentNoteUpdatedAt, setCurrentNote } =
-    useEditorContext()
-  // const { currentNote } = useEditorStore((state) => state)
+  const { currentNote, currentNoteUpdatedAt } = useEditorContext()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [title, setTitle] = useState(currentNote?.title ?? '')
   const [date, setDate] = useState(new Date())
 
-  // useEffect(() => {
-  //   if (textareaRef.current) {
-  //     textareaRef.current.focus()
-  //   }
-  // }, [])
-
-  // useEffect(() => {
-  //   if (currentNote) {
-  //     setTitle(currentNote?.title ?? '')
-  //     setDate(currentNote?.createdAt?.toLocaleTimeString() ?? '')
-  //   }
-  // }, [])
-
   useEffect(() => {
     setTitle(currentNote?.title ?? '')
-    // setDate(currentNote?.updatedAt ?? new Date())
-    // setDate(currentNoteUpdatedAt ?? new Date())
     if (!currentNote?.title) {
       textareaRef.current?.focus()
     }
-    // console.log('currentNoteUpdatedAt', currentNoteUpdatedAt)
-    // console.log('note changed')
   }, [currentNote])
 
   useEffect(() => {
@@ -64,7 +44,6 @@ const PageHeader = () => {
         rows={1}
         placeholder='Untitled Note'
         value={title}
-        // value={currentNote?.title ?? ''}
         onChange={handleTitleChange}
       />
       <p className='bg-transparent text-[#B4B4B4]'>{formatDate(date)}</p>

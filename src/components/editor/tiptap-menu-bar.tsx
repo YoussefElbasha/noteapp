@@ -8,13 +8,10 @@ import CodeBlock from '@/icons/code-block.svg'
 import { useMemo, useState } from 'react'
 import HeadingDropDown from './heading-dropdown'
 import ListDropDown from './list-dropdown'
-import { db } from '@/database/db.model'
 import { useEditorContext } from '@/app/contexts/editor-context'
 
 const TipTapMenuBar = () => {
   const { editor } = useEditorContext()
-
-  // const { editor } = useEditorStore((state) => state)
 
   const menuButtons = useMemo(() => {
     if (!editor) {
@@ -69,11 +66,8 @@ const TipTapMenuBar = () => {
     return null
   }
 
-  // hover:bg-zinc-200/50
-
   return (
     <div className='ml-auto flex flex-row justify-start items-center px-2 py-2 gap-1 rounded-xl bg-component-background-dark w-fit'>
-      {/* <OldHeadingDropDown /> */}
       <HeadingDropDown />
 
       <div className='inline-block min-h-[1em] my-0.5 w-[0px] border-r-[1.6px] self-stretch border-[#3e414a]'></div>
@@ -99,7 +93,6 @@ const TipTapMenuBar = () => {
       ))}
       <div className='inline-block min-h-[1em] my-0.5 w-[0px] border-r-[1.6px] self-stretch border-[#3e414a]'></div>
       <ListDropDown />
-      {/* <OldListDropDown />  */}
     </div>
   )
 }
