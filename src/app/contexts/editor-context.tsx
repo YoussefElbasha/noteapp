@@ -10,7 +10,7 @@ import CharacterCount from '@tiptap/extension-character-count'
 import Underline from '@tiptap/extension-underline'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, Note } from '@/database/db.model'
-import { useDebouncedCallback } from 'use-debounce'
+import { useDebouncedCallback, useThrottledCallback } from 'use-debounce'
 import { Markdown } from 'tiptap-markdown'
 import Image from '@tiptap/extension-image'
 import ImageResize from 'tiptap-extension-resize-image'
@@ -68,6 +68,7 @@ type EditorStates = {
   activePages: number[]
   currentNoteUpdatedAt: Date | undefined
   initialized: boolean
+  isSaving: boolean
 }
 
 type EditorActions = {
@@ -76,6 +77,7 @@ type EditorActions = {
   deleteNote: (id: number | undefined) => void
   addNewNote: () => void
   setInitialized: (initizalized: boolean) => void
+  setIsSaving: (isSaving: boolean) => void
 }
 
 type EditorContext = EditorStates & EditorActions
@@ -91,6 +93,8 @@ export const EditorContext = createContext<EditorContext>({
   currentNoteUpdatedAt: undefined,
   initialized: false,
   setInitialized: () => {},
+  isSaving: false,
+  setIsSaving: () => {},
 })
 
 export const EditorContextProvider = ({
@@ -108,6 +112,8 @@ export const EditorContextProvider = ({
   >(undefined)
 
   const [initialized, setInitialized] = useState<boolean>(false)
+
+  const [isSaving, setIsSaving] = useState<boolean>(false)
 
   const setCurrentNote = (newNote: Note | undefined) => {
     // TODO: check the logic of this
@@ -220,11 +226,34 @@ export const EditorContextProvider = ({
     setCurrentNoteUpdatedAt(updatedAt)
   }, 1000)
 
+  const throttled = useThrottledCallback(async (value) => {
+    const targetDuration = 500
+    const start = performance.now()
+    setIsSaving(true)
+    const updatedAt = new Date()
+    const updatedNote = await db.userNotes.update(currentNote?.id, {
+      content: value.editor.getJSON(),
+      updatedAt: updatedAt,
+    })
+    setCurrentNoteUpdatedAt(updatedAt)
+
+    const end = performance.now()
+    const executionDuration = end - start
+
+    const timeoutDuration = Math.max(0, targetDuration - executionDuration)
+
+    const timeout = setTimeout(() => {
+      setIsSaving(false)
+      clearTimeout(timeout)
+    }, timeoutDuration)
+  }, 5000)
+
   const editor = useEditor({
     extensions: extensions,
     content: currentNote?.content || defaultContent,
     editorProps: editorProps,
-    onUpdate: (value) => debounced(value),
+    // onUpdate: (value) => debounced(value),
+    onUpdate: (value) => throttled(value),
   })
 
   useEffect(() => {
@@ -253,6 +282,8 @@ export const EditorContextProvider = ({
         currentNoteUpdatedAt,
         initialized,
         setInitialized,
+        isSaving,
+        setIsSaving,
       }}
     >
       {children}

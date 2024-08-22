@@ -1,12 +1,12 @@
 import { useEditorContext } from '@/app/contexts/editor-context'
 import { db } from '@/database/db.model'
-import { useEffect, useRef, useState } from 'react'
+import { use, useEffect, useRef, useState } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 import formatDate from '@/lib/format-date'
 
 // TODO: when title becomes too big the textarea scrollbar is too fat and the textarea has weird behavior
 const PageHeader = () => {
-  const { currentNote, currentNoteUpdatedAt } = useEditorContext()
+  const { currentNote, currentNoteUpdatedAt, isSaving } = useEditorContext()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [title, setTitle] = useState(currentNote?.title ?? '')
   const [date, setDate] = useState(new Date())
@@ -46,7 +46,17 @@ const PageHeader = () => {
         value={title}
         onChange={handleTitleChange}
       />
-      <p className='bg-transparent text-[#B4B4B4]'>{formatDate(date)}</p>
+      {isSaving ? (
+        // <p className='bg-transparent text-[#B4B4B4]'>⭕ Saving...</p>
+        <>
+          <span className='bg-transparent text-[#B4B4B4]'>Saving</span>
+          <span className='bg-transparent text-[#B4B4B4]'>.</span>
+          <span className='bg-transparent text-[#B4B4B4] fade-in-0'>.</span>
+          <span className='bg-transparent text-[#B4B4B4] fade-in-0'>.</span>
+        </>
+      ) : (
+        <p className='bg-transparent text-[#B4B4B4]'>{formatDate(date)}</p>
+      )}
     </div>
   )
 }

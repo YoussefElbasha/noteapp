@@ -22,15 +22,21 @@ const formatDate = (date: Date) => {
     return `Last updated today at ${format(date, "h:mm aaaaa'm'")}`
   }
 
-  if (difference < 60 * 60 * 24 * 2 && date.getDate() === currentTime.getDate() - 1) {
+  if (
+    difference < 60 * 60 * 24 * 2 &&
+    date.getDate() === currentTime.getDate() - 1
+  ) {
     return `Last updated yesterday at ${format(date, "h:mm aaaaa'm'")}`
   }
 
-  if (date.getFullYear() === currentTime.getFullYear() && date.getMonth() === currentTime.getMonth()) {
-    return `Last updated ${format(date, "iiii, MMMM d")}`
+  if (
+    date.getFullYear() === currentTime.getFullYear() &&
+    date.getMonth() === currentTime.getMonth()
+  ) {
+    return `Last updated ${format(date, 'iiii, MMMM d')}`
   }
 
-  return `Last updated ${format(date, "iiii, MMMM d, yyyy")}`
+  return `Last updated ${format(date, 'iiii, MMMM d, yyyy')}`
 }
 
 export default formatDate
