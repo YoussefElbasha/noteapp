@@ -1,7 +1,12 @@
 'use client'
 
 import { createContext, use, useContext, useEffect, useState } from 'react'
-import { Editor, useEditor } from '@tiptap/react'
+import {
+  Editor,
+  NodeViewWrapper,
+  ReactNodeViewRenderer,
+  useEditor,
+} from '@tiptap/react'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import TextStyle, { TextStyleOptions } from '@tiptap/extension-text-style'
@@ -14,6 +19,32 @@ import { useDebouncedCallback } from 'use-debounce'
 import { Markdown } from 'tiptap-markdown'
 import Image from '@tiptap/extension-image'
 import ImageResize from 'tiptap-extension-resize-image'
+import TestComponent from './test-component'
+
+const customImage = Image.extend({
+  addNodeView() {
+    return ReactNodeViewRenderer(TestComponent)
+  },
+  draggable: true,
+  // onUpdate() {
+  //   console.log(this)
+  // },
+  // onTransaction() {
+  //   console.log(this)
+  // },
+  // onTransaction: (transaction) => {
+  //   // console.log(transaction.transaction.selection)
+  //   // console.log(transaction.transaction)
+  //   // console.log('transaction', transaction)
+  // },
+})
+
+// .configure({
+//   allowBase64: true,
+//   HTMLAttributes: {
+//     class: 'min-h-[100px] max-h-[500px] ml-[50%] translate-x-[-50%] ',
+//   },
+// })
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -31,12 +62,8 @@ const extensions = [
   CharacterCount,
   Underline,
   Markdown,
-  Image.configure({
-    allowBase64: true,
-    HTMLAttributes: {
-      class: 'min-h-[100px] max-h-[500px] ml-[50%] translate-x-[-50%] ',
-    },
-  }),
+  customImage,
+
   // ImageResize
   // BubbleMenu.configure({
   //   element: document.querySelector('.menu'),

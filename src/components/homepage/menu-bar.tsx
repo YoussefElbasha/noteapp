@@ -45,8 +45,15 @@ const MenuBar = () => {
     reader.onload = () => {
       editor?.commands.setImage({
         src: `${reader.result}`,
+        title: '1',
       })
     }
+
+    // reader.onload = () => {
+    //   editor?.commands.setImage({
+    //     src: URL.createObjectURL(blob),
+    //   })
+    // }
 
     reader.readAsDataURL(blob)
   }, [blob])
@@ -59,7 +66,7 @@ const MenuBar = () => {
     inputRef.current.click()
   }
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     const files = e.target.files
     if (!files) return
@@ -70,7 +77,27 @@ const MenuBar = () => {
       type: 'image/png',
     })
 
-    setBlob(fileBlob)
+    const imageId = await db.images.add({
+      name: file.name,
+      blob: fileBlob,
+    })
+
+    editor?.commands.setImage({
+      src: URL.createObjectURL(fileBlob),
+      title: imageId.toString(),
+    })
+
+    // const image = await db.images.get(imageId)
+
+    // console.log('imageId', imageId)
+
+    // console.log('image', image)
+
+    // if (!image) return
+
+    // setBlob(image.blob)
+
+    // setBlob(fileBlob)
 
     e.target.value = ''
   }

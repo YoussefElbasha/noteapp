@@ -25,18 +25,26 @@ export interface FolderToNote {
   noteId: number
 }
 
+export interface Image {
+  id?: number
+  name: string
+  blob: Blob
+}
+
 // const test = new Dexie('', { addons: [relationships] })
 
 export class DB extends Dexie {
   // table name is userNotes
   folders!: Table<Folder>
   userNotes!: Table<Note>
+  images!: Table<Image>
   constructor() {
     super('myDatabase')
     this.version(1).stores({
       folders: '++id, title, createdAt, updatedAt',
       userNotes: '++id, title, content, createdAt, updatedAt, lastOpenedAt',
       folderToNote: 'folderId, noteId',
+      images: '++id, name, blob',
     })
   }
 }
