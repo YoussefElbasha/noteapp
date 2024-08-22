@@ -34,7 +34,7 @@ const extensions = [
   Image.configure({
     allowBase64: true,
     HTMLAttributes: {
-      class: 'min-h-[100px] max-h-[500px] ml-[50%] translate-x-[-50%] my-2',
+      class: 'min-h-[100px] max-h-[500px] ml-[50%] translate-x-[-50%] my-6',
     },
   }),
   // ImageResize
