@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, use, useContext, useEffect, useState } from 'react'
+import { act, createContext, use, useContext, useEffect, useState } from 'react'
 import { Editor, useEditor } from '@tiptap/react'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
@@ -132,7 +132,15 @@ export const EditorContextProvider = ({
       setNote(newNote)
       editor?.commands.setContent(newNote.content)
       setCurrentNoteUpdatedAt(newNote.updatedAt)
-      setActivePages([newNote.id])
+      setActivePages((prev) => {
+        if (!newNote.id) return prev
+
+        if (prev.length === 0) {
+          localStorage.setItem('activePages', JSON.stringify([newNote.id]))
+          return [newNote.id]
+        }
+        return prev
+      })
       return
     }
 
@@ -141,9 +149,11 @@ export const EditorContextProvider = ({
         const newArray = [...activePages]
         newArray[activePages.indexOf(oldNoteId)] = newNote.id
         setActivePages(newArray)
+        localStorage.setItem('activePages', JSON.stringify(newArray))
       } else {
         const newActivePages = [...activePages, newNote.id]
         setActivePages(newActivePages)
+        localStorage.setItem('activePages', JSON.stringify(newActivePages))
       }
     }
 
@@ -164,14 +174,17 @@ export const EditorContextProvider = ({
             setCurrentNote(note)
             const newActivePages = activePages.filter((pageId) => pageId !== id)
             setActivePages(newActivePages)
+            localStorage.setItem('activePages', JSON.stringify(newActivePages))
           })
       } else {
         setCurrentNote(undefined)
+        localStorage.setItem('activePages', JSON.stringify([]))
       }
     }
 
     const newActivePages = activePages.filter((pageId) => pageId !== id)
     setActivePages(newActivePages)
+    localStorage.setItem('activePages', JSON.stringify(newActivePages))
   }
 
   const addNewNote = async () => {
@@ -257,16 +270,26 @@ export const EditorContextProvider = ({
   })
 
   useEffect(() => {
-    const latestOpenedNote = db.userNotes
-      .orderBy('lastOpenedAt')
-      .last()
-      .then((note) => {
-        setCurrentNote(note)
-        setInitialized(true)
-      })
-      .catch((err) => {
-        console.log('err', err)
-      })
+    const history = JSON.parse(localStorage.getItem('activePages') || '[]')
+
+    if (history.length > 0) {
+      const latestOpenedNote = db.userNotes
+        .orderBy('lastOpenedAt')
+        .last()
+        .then((note) => {
+          setActivePages(
+            JSON.parse(localStorage.getItem('activePages') || '[]')
+          )
+          setCurrentNote(note)
+          setInitialized(true)
+        })
+        .catch((err) => {
+          console.log('err', err)
+        })
+    } else {
+      setActivePages([])
+      setInitialized(true)
+    }
   }, [editor])
 
   return (
