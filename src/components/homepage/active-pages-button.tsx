@@ -8,6 +8,7 @@ import {
 import { db } from '@/database/db.model'
 import { useLiveQuery } from 'dexie-react-hooks'
 import cn from 'classnames'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 type ActivePagesButtonProps = {
   noteId: number
@@ -17,6 +18,18 @@ type ActivePagesButtonProps = {
 const ActivePagesButton = ({ pageNumber, noteId }: ActivePagesButtonProps) => {
   const { currentNote, setCurrentNote, closeActivePage } = useEditorContext()
   const note = useLiveQuery(() => db.userNotes.get(noteId))
+
+  useHotkeys(
+    `ctrl+${pageNumber}`,
+    (_, handler) => {
+      setCurrentNote(note)
+    },
+    {
+      enableOnContentEditable: true,
+      enableOnFormTags: true,
+      preventDefault: true,
+    }
+  )
 
   return (
     <TooltipProvider delayDuration={100}>

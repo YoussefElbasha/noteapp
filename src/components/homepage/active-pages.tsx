@@ -3,6 +3,7 @@ import ActivePagesButton from './active-pages-button'
 
 const ActivePages = () => {
   const { activePages } = useEditorContext()
+
   return (
     <div className='fixed flex flex-row items-center justify-center gap-2 bottom-3 left-8'>
       {activePages.map((noteId, index) => (
