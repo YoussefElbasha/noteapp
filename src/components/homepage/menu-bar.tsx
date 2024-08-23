@@ -14,6 +14,7 @@ import {
 } from '@/components/shadcn/dropdown'
 import JsonIcon from '@/icons/json-icon.svg'
 import Markdown from '@/icons/markdown.svg'
+import HtmlIcon from '@/icons/html.svg'
 import saveAs from 'file-saver'
 import { useEffect, useRef, useState } from 'react'
 import { db } from '@/database/db.model'
@@ -159,6 +160,32 @@ const MenuBar = () => {
                 >
                   <JsonIcon className='w-6 h-6 mr-2 stroke-current' />
                   <p className='text-[13px] py-[2px] '>JSON</p>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className='pl-2'
+                  onClick={async () => {
+                    const html = editor?.getHTML()
+
+                    if (!html) return
+
+                    const blob = new Blob([html], {
+                      type: 'text/plain',
+                    })
+
+                    const currentTitle = await db.userNotes
+                      .get(currentNote?.id)
+                      .then((note) => {
+                        return note?.title
+                      })
+
+                    saveAs(
+                      blob,
+                      `${!currentTitle ? 'untitled' : currentTitle}.html`
+                    )
+                  }}
+                >
+                  <HtmlIcon className='w-6 h-6 mr-2 fill-current' />
+                  <p className='text-[13px] py-[2px] '>HTML</p>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
