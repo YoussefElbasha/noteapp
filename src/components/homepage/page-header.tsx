@@ -47,14 +47,14 @@ const PageHeader = () => {
         onChange={handleTitleChange}
       />
       {isSaving ? (
-        // <p className='bg-transparent text-[#B4B4B4]'>⭕ Saving...</p>
-        <>
-          <span className='bg-transparent text-[#B4B4B4]'>Saving</span>
-          <span className='bg-transparent text-[#B4B4B4]'>.</span>
-          <span className='bg-transparent text-[#B4B4B4] fade-in-0'>.</span>
-          <span className='bg-transparent text-[#B4B4B4] fade-in-0'>.</span>
-        </>
+        <p className='bg-transparent text-[#B4B4B4]'>⭕ Saving...</p>
       ) : (
+        // <>
+        //   <span className='bg-transparent text-[#B4B4B4]'>Saving</span>
+        //   <span className='bg-transparent text-[#B4B4B4]'>.</span>
+        //   <span className='bg-transparent text-[#B4B4B4] fade-in-0'>.</span>
+        //   <span className='bg-transparent text-[#B4B4B4] fade-in-0'>.</span>
+        // </>
         <p className='bg-transparent text-[#B4B4B4]'>{formatDate(date)}</p>
       )}
     </div>
