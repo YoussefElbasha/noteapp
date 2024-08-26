@@ -2,16 +2,9 @@ import cn from 'classnames'
 import Page from '@/icons/page.svg'
 import TrashAlt from '@/icons/delete-alt.svg'
 import { useEditorContext } from '@/app/contexts/editor-context'
-import { Note } from '@/database/db.model'
 
 type NestableNoteButtonProps = {
   item: any
-
-  // {
-  //   id: number | undefined
-  //   note: Note
-  //   type: string
-  // }
 }
 
 const NestableNoteButton = ({ item }: NestableNoteButtonProps) => {
@@ -32,7 +25,6 @@ const NestableNoteButton = ({ item }: NestableNoteButtonProps) => {
         { 'full-bleed bg-hover-dark': item.id === currentNote?.id }
       )}
       onClick={() => {
-        // editor?.commands.setContent(item.note.content)
         setCurrentNote(item.note)
       }}
     >
@@ -46,18 +38,6 @@ const NestableNoteButton = ({ item }: NestableNoteButtonProps) => {
         <button
           onClick={(e) => {
             e.stopPropagation()
-            // db.userNotes.delete(item.id)
-
-            // if (currentNote?.id === item.id) {
-            //   db.userNotes.toArray().then((notes) => {
-            //     if (notes?.length !== 0) {
-            //       setCurrentNote(notes?.[0])
-            //     } else {
-            //       setCurrentNote(undefined)
-            //     }
-            //   })
-            // }
-
             deleteNote(item.id)
           }}
           className='invisible group-hover:visible'

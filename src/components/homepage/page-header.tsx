@@ -1,6 +1,6 @@
 import { useEditorContext } from '@/app/contexts/editor-context'
 import { db } from '@/database/db.model'
-import { use, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 import formatDate from '@/lib/format-date'
 
