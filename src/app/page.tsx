@@ -1,9 +1,9 @@
 'use client'
 
-import ActivePages from '@/components/homepage/active-pages'
-import CharacterCount from '@/components/homepage/character-count'
-import EditorPane from '@/components/homepage/editor-pane'
-import MenuBar from '@/components/homepage/menu-bar'
+import ActivePages from '@/components/home-page/active-pages/active-pages'
+import CharacterCount from '@/components/home-page/character-count'
+import EditorPane from '@/components/editor/editor-pane/editor-pane'
+import MenuBar from '@/components/menu-bar/menu-bar'
 
 const HomePage = () => {
   return (

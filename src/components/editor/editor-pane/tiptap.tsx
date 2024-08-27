@@ -1,7 +1,7 @@
 'use client'
 
 import { BubbleMenu, EditorContent } from '@tiptap/react'
-import TipTapMenuBar from './tiptap-menu-bar'
+import TipTapMenuBar from '../tiptap-menu-bar/tiptap-menu-bar'
 import { useEditorContext } from '@/app/contexts/editor-context'
 
 const TipTap = () => {

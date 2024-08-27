@@ -1,8 +1,8 @@
 'use client'
 
 import { useEditorContext } from '@/app/contexts/editor-context'
-import TipTap from '@/components/editor/tiptap'
-import PageHeader from '@/components/homepage/page-header'
+import TipTap from '@/components/editor/editor-pane/tiptap'
+import PageHeader from '@/components/editor/editor-pane/page-header'
 
 const EditorPane = () => {
   const { editor, currentNote, initialized } = useEditorContext()

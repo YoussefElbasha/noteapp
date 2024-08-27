@@ -47,7 +47,7 @@ const PageHeader = () => {
         onChange={handleTitleChange}
       />
       {isSaving ? (
-        <p className='bg-transparent text-[#B4B4B4]'>⭕ Saving...</p>
+        <p className='bg-transparent text-[#B4B4B4]'>Saving...</p>
       ) : (
         // <>
         //   <span className='bg-transparent text-[#B4B4B4]'>Saving</span>

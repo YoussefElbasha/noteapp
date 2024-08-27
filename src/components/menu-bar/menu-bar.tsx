@@ -5,7 +5,7 @@ import Upload from '@/icons/upload.svg'
 import Add from '@/icons/add.svg'
 import Download from '@/icons/download.svg'
 import { useEditorContext } from '@/app/contexts/editor-context'
-import MenuSheet from '../menu-sheet/menu-sheet'
+import MenuSheet from './menu-sheet/menu-sheet'
 import {
   DropdownMenu,
   DropdownMenuContent,

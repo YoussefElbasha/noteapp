@@ -6,8 +6,8 @@ import BlockQuote from '@/icons/double-quotes-r.svg'
 import Code from '@/icons/code-view.svg'
 import CodeBlock from '@/icons/code-block.svg'
 import { useMemo } from 'react'
-import HeadingDropDown from './heading-dropdown'
-import ListDropDown from './list-dropdown'
+import HeadingDropDown from '@/components/editor/tiptap-menu-bar/heading-dropdown'
+import ListDropDown from '@/components/editor/tiptap-menu-bar/list-dropdown'
 import { useEditorContext } from '@/app/contexts/editor-context'
 
 const TipTapMenuBar = () => {

@@ -1,6 +1,6 @@
 'use client'
 
-import { act, createContext, use, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { Editor, useEditor } from '@tiptap/react'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
@@ -13,7 +13,6 @@ import { db, Note } from '@/database/db.model'
 import { useDebouncedCallback, useThrottledCallback } from 'use-debounce'
 import { Markdown } from 'tiptap-markdown'
 import Image from '@tiptap/extension-image'
-import ImageResize from 'tiptap-extension-resize-image'
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -38,10 +37,6 @@ const extensions = [
         'min-h-[100px] max-h-[500px] ml-[50%] translate-x-[-50%] my-4 first:mt-0',
     },
   }),
-  // ImageResize
-  // BubbleMenu.configure({
-  //   element: document.querySelector('.menu'),
-  // }),
 ]
 
 export const defaultContent = {
@@ -59,8 +54,6 @@ const editorProps = {
       'tiptap prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none bg-transparent text-text-dark overflow-y-auto min-h-[calc(100vh-2.62rem-1.25rem-1.25rem-1.5rem-5rem)] overflow-x-hidden',
   },
 }
-
-// min-h-[calc(100vh-2.62rem-1.25rem-1.25rem-1.5rem)]
 
 type EditorStates = {
   editor: Editor | null
@@ -102,8 +95,6 @@ export const EditorContextProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const notesList = useLiveQuery(() => db.userNotes.toArray())
-
   const [currentNote, setNote] = useState<Note | undefined>(undefined)
   const [activePages, setActivePages] = useState<number[]>([])
 
@@ -209,35 +200,7 @@ export const EditorContextProvider = ({
     db.userNotes.delete(id)
 
     closeActivePage(id)
-
-    // if (id === currentNote?.id) {
-    //   if (notesList && notesList?.length > 1) {
-    //     setCurrentNote(notesList?.[0])
-    //   } else {
-    //     setCurrentNote(undefined)
-    //   }
-    // }
   }
-
-  // useEffect(() => {
-  //   const notes = db.userNotes.toArray().then((notes) => {
-  //     if (notes?.length !== 0) {
-  //       if (!notes[0] || !notes[0].id) {
-  //         return
-  //       }
-  //       setCurrentNote(notes[0])
-  //     }
-  //   })
-  // }, [])
-
-  const debounced = useDebouncedCallback((value) => {
-    const updatedAt = new Date()
-    db.userNotes.update(currentNote?.id, {
-      content: value.editor.getJSON(),
-      updatedAt: updatedAt,
-    })
-    setCurrentNoteUpdatedAt(updatedAt)
-  }, 1000)
 
   const throttled = useThrottledCallback(async (value) => {
     const targetDuration = 500
@@ -265,7 +228,6 @@ export const EditorContextProvider = ({
     extensions: extensions,
     content: currentNote?.content || defaultContent,
     editorProps: editorProps,
-    // onUpdate: (value) => debounced(value),
     onUpdate: (value) => throttled(value),
   })
 

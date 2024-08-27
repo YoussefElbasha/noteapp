@@ -1,7 +1,7 @@
 import FontSize from '@/icons/font-size.svg'
 import { useEditorContext } from '@/app/contexts/editor-context'
-import DropdownMenuButton from '../dropdown-menu/dropdown-menu-button'
-import DropdownMenu from '../dropdown-menu/dropdown-menu'
+import DropdownMenuButton from '@/components/dropdown-menu/dropdown-menu-button'
+import DropdownMenu from '@/components/dropdown-menu/dropdown-menu'
 
 const HeadingDropDown = () => {
   const { editor } = useEditorContext()

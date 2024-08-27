@@ -8,13 +8,13 @@ import {
 } from '@/components/shadcn/sheet'
 import Nestable from 'react-nestable'
 import Menu from '@/icons/menu.svg'
-import { defaultContent, useEditorContext } from '@/app/contexts/editor-context'
+import { useEditorContext } from '@/app/contexts/editor-context'
 import { db } from '@/database/db.model'
 import { useLiveQuery } from 'dexie-react-hooks'
 import NestableNoteButton from './nestable-note-button'
 
 const MenuSheet = () => {
-  const { editor, setCurrentNote } = useEditorContext()
+  const { addNewNote } = useEditorContext()
 
   const notesList =
     useLiveQuery(() =>
@@ -52,22 +52,8 @@ const MenuSheet = () => {
         <SheetFooter>
           <button
             className='flex flex-row items-center justify-center w-full py-2 transition-all rounded bg-component-background-dark hover:brightness-110 group'
-            // TODO: use addNewNote from context
             onClick={() => {
-              db.userNotes
-                .add({
-                  title: '',
-                  content: defaultContent,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  lastOpenedAt: new Date(),
-                })
-                .then((noteId) => {
-                  db.userNotes.get(noteId).then((note) => {
-                    setCurrentNote(note)
-                    editor?.commands.setContent(defaultContent)
-                  })
-                })
+              addNewNote()
             }}
           >
             <p className='text-sm transition-colors text-text-dark/60 group-hover:text-text-dark'>

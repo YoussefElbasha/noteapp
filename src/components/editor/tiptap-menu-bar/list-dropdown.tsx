@@ -1,6 +1,6 @@
-import DropdownMenu from '../dropdown-menu/dropdown-menu'
+import DropdownMenu from '@/components/dropdown-menu/dropdown-menu'
 import BulletList from '@/icons/list-unordered.svg'
-import DropdownMenuButton from '../dropdown-menu/dropdown-menu-button'
+import DropdownMenuButton from '@/components/dropdown-menu/dropdown-menu-button'
 import { useEditorContext } from '@/app/contexts/editor-context'
 import OrderedList from '@/icons/list-ordered.svg'
 
