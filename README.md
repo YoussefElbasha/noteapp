@@ -5,7 +5,7 @@
 <a href="https://github.com/YoussefElbasha/noteapp/issues">Report Bug</a> . <a href="https://github.com/YoussefElbasha/noteapp/issues">Request Feature</a>
 </p>
 
-![Stargazers](https://img.shields.io/github/stars/YoussefElbasha/noteapp?style=social) ![Issues](https://img.shields.io/github/issues/YoussefElbasha/noteapp) 
+![GitHub Repo stars](https://img.shields.io/github/stars/YoussefElbasha/noteapp?style=social) ![Issues](https://img.shields.io/github/issues/YoussefElbasha/noteapp) 
 
 ## Screenshots
 ![Main Page](https://i.imgur.com/4uF9fWR.png)
