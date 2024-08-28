@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📝 noteapp
+**noteapp** is a lightweight, client-side note-taking application built with **Next.js** and **TypeScript**. The app has no server component and utilizes **IndexedDB** for local data storage, ensuring that it works completely offline so your notes are always accessible even without an internet connection. Perfect for privacy-focused users who need a reliable, offline-first note-taking solution.
 
-## Getting Started
+<p align="center">
+<a href="https://github.com/YoussefElbasha/noteapp/issues">Report Bug</a> . <a href="https://github.com/YoussefElbasha/noteapp/issues">Request Feature</a>
+</p>
 
-First, run the development server:
+![Stargazers](https://img.shields.io/github/stars/YoussefElbasha/noteapp?style=social) ![Issues](https://img.shields.io/github/issues/YoussefElbasha/noteapp) 
+
+## Screenshots
+![Main Page](https://i.imgur.com/4uF9fWR.png)
+
+## Installation and Usage
+To run the project locally, follow these steps:
+
+1. Clone the repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/YoussefElbasha/noteapp.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install the dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd noteapp
+yarn install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. Run the development server:
 
-## Learn More
+```bash
+yarn dev
+```
+## Contact
 
-To learn more about Next.js, take a look at the following resources:
+Email: youssef.elbasha.saad@gmail.com <br>
+LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/youssef-elbasha/ "LinkedIn Profile")
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
